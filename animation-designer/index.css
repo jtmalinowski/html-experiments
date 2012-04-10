@@ -1,0 +1,46 @@
+html, body { margin: 0; padding: 0; height: 100%; width: 100%; }
+
+#lines {
+  background-size: 20px 20px;    
+  background-image: -webkit-repeating-linear-gradient(0deg, #6E6E6E, #6E6E6E 2px, transparent 2px, transparent 7px),-webkit-repeating-linear-gradient(-90deg, #6E6E6E, #6E6E6E 2px, transparent 2px, transparent 7px);
+  background-image:repeating-linear-gradient(0deg, #6E6E6E, #6E6E6E 2px, transparent 2px, transparent 7px),repeating-linear-gradient(-90deg, #6E6E6E, #6E6E6E 2px, transparent 2px, transparent 7px);
+  height:100%;
+  width:100%;
+  opacity:0.14;
+  position:absolute;
+  top:0;
+  left:0;
+  z-index:-4;
+}
+
+#overlay {
+	background-image: -webkit-radial-gradient(50% 50%, circle closest-side, transparent 10%,#0d7cb3 400%);
+	height:100%;
+  width:100%;
+  position:absolute;
+  top:0;
+  left:0;
+  z-index:-3;
+}
+
+#curve-designer-container {
+	margin: 20px;
+	border: 1px solid black;
+	padding: 10px;
+	display: inline-block;
+}
+
+#curve-designer {
+}
+
+.curve-pointer {
+	border-left: 15px solid transparent;
+	border-right: 15px solid transparent;
+	border-bottom: 15px solid transparent;
+
+	border-top: 15px solid black;
+	width: 0px;
+	height: 0px;
+
+	position: absolute;
+}
