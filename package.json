@@ -1,0 +1,15 @@
+{
+  "name": "css-experiments-server",
+  "version": "0.0.1",
+  "author": "Jakub Malinowski <jakubmal@gmail.com>",
+  "description": "static server for css-experiments",
+  "dependencies": {
+  	"static-resource": "0.1.x"
+  },
+  "scripts": {
+    "start": "node server.js > /tmp/nohup.out 2>&1 &"
+  },
+  "engine": {
+  	"node": ">=0.6.12" 
+  }
+}
