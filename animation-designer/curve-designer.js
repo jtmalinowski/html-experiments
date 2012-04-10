@@ -67,4 +67,8 @@ var drawLine = function () {
 	ctx.stroke();
 };
 
+var generateTransition = function () {
+	// cubic-bezier(0.25, 0.1, 0.25, 1.0)
+};
+
 window.addEventListener('load', init, false);
