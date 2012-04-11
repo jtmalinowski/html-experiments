@@ -4,23 +4,23 @@ html, body { margin: 0; padding: 0; height: 100%; width: 100%; }
   background-size: 20px 20px;    
   background-image: -webkit-repeating-linear-gradient(0deg, #6E6E6E, #6E6E6E 2px, transparent 2px, transparent 7px),-webkit-repeating-linear-gradient(-90deg, #6E6E6E, #6E6E6E 2px, transparent 2px, transparent 7px);
   background-image:repeating-linear-gradient(0deg, #6E6E6E, #6E6E6E 2px, transparent 2px, transparent 7px),repeating-linear-gradient(-90deg, #6E6E6E, #6E6E6E 2px, transparent 2px, transparent 7px);
-  height:100%;
-  width:100%;
-  opacity:0.04;
-  position:absolute;
-  top:0;
-  left:0;
-  z-index:-4;
+  height: 100%;
+  width: 100%;
+  opacity: 0.04;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -4;
 }
 
 #overlay {
 	background-image: -webkit-radial-gradient(50% 50%, circle closest-side, transparent 10%,#0d7cb3 400%);
-	height:100%;
-  width:100%;
-  position:absolute;
-  top:0;
-  left:0;
-  z-index:-3;
+	height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -3;
   opacity: 0.5;
 }
 
@@ -59,7 +59,7 @@ html, body { margin: 0; padding: 0; height: 100%; width: 100%; }
 	
 	width: 100px;
 	height: 30px;
-	background-color: #fcc;	
+	background-color: #fcc;
 
 	-webkit-transition-property: width;
 	-webkit-transition-duration: 1s;
@@ -86,16 +86,16 @@ html, body { margin: 0; padding: 0; height: 100%; width: 100%; }
 }
 
 a {
-	color:rgba(255,255,255,1);
-	text-decoration:none;
-	background-color:rgba(219,87,5,1);
-	font-family:'Yanone Kaffeesatz';
-	font-weight:700;
+	color: rgba(255,255,255,1);
+	text-decoration: none;
+	background-color: rgba(219,87,5,1);
+	font-family: 'Yanone Kaffeesatz';
+	font-weight: 700;
 	font-size: 20px;
 	display: inline-block;
 	padding: 4px 15px;
-	-webkit-border-radius:8px;
-	        border-radius:8px;
+	-webkit-border-radius: 8px;
+	        border-radius: 8px;
 	-webkit-box-shadow:0px 9px 0px rgba(219,31,5,1), 0px 9px 25px rgba(0,0,0,.7);
 	        box-shadow:0px 9px 0px rgba(219,31,5,1), 0px 9px 25px rgba(0,0,0,.7);
 }
@@ -104,5 +104,5 @@ a:active {
 	   -moz-box-shadow:0px 3px 0px rgba(219,31,5,1), 0px 3px 6px rgba(0,0,0,.9);
 	        box-shadow:0px 3px 0px rgba(219,31,5,1), 0px 3px 6px rgba(0,0,0,.9);
 	position:relative;
-	top:6px;
+	top: 6px;
 }

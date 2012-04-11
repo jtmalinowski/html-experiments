@@ -1,4 +1,4 @@
-var canvas, ctx, pointers, animationElement;
+var canvas, ctx, pointers, animationElement, animationLocked;
 var init = function () {
 	canvas = document.getElementById('curve-designer');
 
@@ -16,10 +16,12 @@ var init = function () {
 
 	ctx = canvas.getContext('2d');
 	ctx.strokeStyle = 'rgb(200,0,0)';
+	ctx.fillStyle = 'rgb(0,0,0)';
 
 	drawLine();
 
 	animationElement = document.getElementById('animation-element');
+	animationElement.addEventListener('webkitTransitionEnd', function () { unlockAnimation(); }, false);
 	generateTransition();
 
 	animationButton = document.getElementById('animation-trigger');
@@ -79,16 +81,60 @@ var toggleAnimation = (function () {
 	var isRun = false;
 		
 	return function () {
+		if (animationLocked) return;
+
+		runAnimationIndicator();
+
 		if (!isRun) animationElement.setAttribute('class', 'animation-run');
 		else animationElement.setAttribute('class', '');
 
 		isRun = !isRun;
+		animationLocked = true;
 	};
 })();
 
+var unlockAnimation = function () {
+	animationLocked = false;
+};
+
+var runAnimationIndicator = function () {
+	var P1x = 0,
+			P1y = 300,
+			P2x = pointers[0].offsetLeft - canvas.offsetLeft + 15,
+			P2y = pointers[0].offsetTop - canvas.offsetTop + 15,
+			P3x = pointers[1].offsetLeft - canvas.offsetLeft + 15,
+			P3y = pointers[1].offsetTop - canvas.offsetTop + 15,
+			P4x = 300,
+			P4y = 0;
+
+	var bezierX = function (t) {
+		var s = (1 - t);
+		return s*s*s*P1x + 3*s*s*t*P2x + 3*s*t*t*P3x + t*t*t*P4x;
+	};
+	var bezierY = function (t) {
+		var s = (1 - t);
+		return s*s*s*P1y + 3*s*s*t*P2y + 3*s*t*t*P3y + t*t*t*P4y;
+	};
+
+	var imageData = ctx.getImageData(0, 0, 300, 300);
+
+	var t = 1;
+	var interval = setInterval(function () {
+		var x = parseInt(bezierX(t / 40));
+		var y = parseInt(bezierY(t / 40));
+
+		ctx.clearRect(0, 0, 300, 300);
+		ctx.putImageData(imageData, 0, 0);
+		ctx.beginPath();
+		ctx.arc(x, y, 5, 0, 2 * Math.PI, false);
+		ctx.fill();
+
+		if (t == 40) clearInterval(interval);
+		t++;
+	}, 25);
+};
+
 var generateTransition = function () {
-	// cubic-bezier(0.25, 0.1, 0.25, 1.0)
-	// 
 	var ax = (pointers[0].offsetLeft - canvas.offsetLeft + 15), 
 			ay = 300 - (pointers[0].offsetTop - canvas.offsetTop + 15), 
 			bx = (pointers[1].offsetLeft - canvas.offsetLeft + 15), 
