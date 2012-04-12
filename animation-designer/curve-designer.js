@@ -58,9 +58,13 @@ var BezierPath = function () {
 	this.addPointer(new Pointer(this.domElement.offsetLeft - 15 + 300, this.domElement.offsetTop - 15 + 300));	
 
 	this.canvas = document.getElementById('curve-designer');
-	this.ctx = this.canvas.getContext('2d');
-	this.ctx.strokeStyle = 'rgb(200,0,0)';
-	this.ctx.fillStyle = 'rgb(0,0,0)';
+	this.designerContext = this.canvas.getContext('2d');
+	this.designerContext.strokeStyle = 'rgb(200,0,0)';
+	this.designerContext.fillStyle = 'rgb(0,0,0)';
+
+	this.presenterContext = document.getElementById('curve-presenter').getContext('2d');
+	this.designerContext.strokeStyle = 'rgb(200,0,0)';
+	this.designerContext.fillStyle = 'rgb(0,0,0)';
 
 	return this;
 };
@@ -71,44 +75,67 @@ BezierPath.prototype.addPointer = function(pointer) {
 };
 
 BezierPath.prototype.drawLine = function () {
-	this.ctx.clearRect(0, 0, 300, 300);
-	this.ctx.beginPath();
-	this.ctx.moveTo(0, 300);
-	this.ctx.bezierCurveTo(
-		this.pointers[0].getLeft() - this.canvas.offsetLeft + 15, 
-		this.pointers[0].getTop() - this.canvas.offsetTop + 15, 
-		this.pointers[1].getLeft() - this.canvas.offsetLeft + 15, 
-		this.pointers[1].getTop() - this.canvas.offsetTop + 15, 
+	var points = this.getBezierPoints();
+	
+	this.designerContext.clearRect(0, 0, 300, 300);
+	this.designerContext.beginPath();
+	this.designerContext.moveTo(0, 300);
+	this.designerContext.bezierCurveTo(
+		points[0].x * 300, 
+		300 - points[0].y * 300, 
+		points[1].x * 300, 
+		300 - points[1].y * 300, 
 		300, 0);
-	this.ctx.stroke();
+	this.designerContext.stroke();
 
-	this.ctx.beginPath();
-	this.ctx.moveTo(0, 300);
-	this.ctx.lineTo(
-		this.pointers[0].getLeft() - this.canvas.offsetLeft + 15, 
-		this.pointers[0].getTop() - this.canvas.offsetTop + 15 
+	this.designerContext.beginPath();
+	this.designerContext.moveTo(0, 300);
+	this.designerContext.lineTo(
+		points[0].x * 300, 
+		300 - points[0].y * 300 
 	);
-	this.ctx.stroke();
+	this.designerContext.stroke();
 
-	this.ctx.beginPath();
-	this.ctx.moveTo(300, 0);
-	this.ctx.lineTo(
-		this.pointers[1].getLeft() - this.canvas.offsetLeft + 15, 
-		this.pointers[1].getTop() - this.canvas.offsetTop + 15 
+	this.designerContext.beginPath();
+	this.designerContext.moveTo(300, 0);
+	this.designerContext.lineTo(
+		points[1].x * 300, 
+		300 - points[1].y * 300 
 	);
-	this.ctx.stroke();
+	this.designerContext.stroke();
+
+	var P1x = 0,
+			P1y = 0,
+			P2x = points[0].y * 500,
+			P2y = points[0].x * 200,
+			P3x = points[1].y * 500,
+			P3y = points[1].x * 200,
+			P4x = 500,
+			P4y = 200;
+
+	this.isRun && (P1x = 500 - P1x);
+	this.isRun && (P2x = 500 - P2x);
+	this.isRun && (P3x = 500 - P3x);
+	this.isRun && (P4x = 500 - P4x);
+
+	this.presenterContext.clearRect(0, 0, 500, 200);
+	this.presenterContext.beginPath();
+	this.presenterContext.moveTo(P1x, P1y);
+	this.presenterContext.bezierCurveTo(P2x, P2y, P3x, P3y, P4x, P4y);
+	this.presenterContext.stroke();
 };
 
 BezierPath.prototype.toggleAnimation = function () {
-		if (animationLocked) return;
+	if (animationLocked) return;
 
-		this.runAnimationIndicator();
+	this.drawLine();
+	this.runAnimationIndicator();
 
-		if (!this.isRun) animationElement.setAttribute('class', 'animation-run');
-		else animationElement.setAttribute('class', '');
+	if (!this.isRun) animationElement.setAttribute('class', 'animation-run');
+	else animationElement.setAttribute('class', '');
 
-		this.isRun = !this.isRun;
-		animationLocked = true;
+	this.isRun = !this.isRun;
+	animationLocked = true;
 };
 
 BezierPath.prototype.unlockAnimation = function () {
@@ -116,43 +143,64 @@ BezierPath.prototype.unlockAnimation = function () {
 };
 
 BezierPath.prototype.runAnimationIndicator = function () {
+	var points = this.getBezierPoints();
+	var D1x = 0,
+			D1y = 300,
+			D2x = points[0].x * 300,
+			D2y = 300 - points[0].y * 300,
+			D3x = points[1].x * 300,
+			D3y = 300 - points[1].y * 300,
+			D4x = 300,
+			D4y = 0;
+
 	var P1x = 0,
-			P1y = 300,
-			P2x = this.pointers[0].getLeft() - this.canvas.offsetLeft + 15,
-			P2y = this.pointers[0].getTop() - this.canvas.offsetTop + 15,
-			P3x = this.pointers[1].getLeft() - this.canvas.offsetLeft + 15,
-			P3y = this.pointers[1].getTop() - this.canvas.offsetTop + 15,
-			P4x = 300,
-			P4y = 0;
+			P1y = 0,
+			P2x = points[0].x * 200,
+			P2y = points[0].y * 500,
+			P3x = points[1].x * 200,
+			P3y = points[1].y * 500,
+			P4x = 200,
+			P4y = 500; 
 
-	var bezierX = function (t) {
+	this.isRun && (P1y = 500 - P1y);
+	this.isRun && (P2y = 500 - P2y);
+	this.isRun && (P3y = 500 - P3y);
+	this.isRun && (P4y = 500 - P4y);
+
+	var bezier = function (t, p1, p2, p3, p4) {
 		var s = (1 - t);
-		return s*s*s*P1x + 3*s*s*t*P2x + 3*s*t*t*P3x + t*t*t*P4x;
-	};
-	var bezierY = function (t) {
-		var s = (1 - t);
-		return s*s*s*P1y + 3*s*s*t*P2y + 3*s*t*t*P3y + t*t*t*P4y;
+		return s*s*s*p1 + 3*s*s*t*p2 + 3*s*t*t*p3 + t*t*t*p4;
 	};
 
-	var imageData = this.ctx.getImageData(0, 0, 300, 300);
+	var designerImageData = this.designerContext.getImageData(0, 0, 300, 300);
+	var presenterImageData = this.presenterContext.getImageData(0, 0, 500, 200);
 
 	var t = 1;
 	var interval = setInterval((function () {
-			var x = parseInt(bezierX(t / 40));
-			var y = parseInt(bezierY(t / 40));
-	
-			this.ctx.clearRect(0, 0, 300, 300);
-			this.ctx.putImageData(imageData, 0, 0);
-			this.ctx.beginPath();
-			this.ctx.arc(x, y, 5, 0, 2 * Math.PI, false);
-			this.ctx.fill();
-	
-			if (t == 40) clearInterval(interval);
-			t++;
-		}).bind(this), 25);
+		var Dx = parseInt(bezier(t / 40, D1x, D2x, D3x, D4x));
+		var Dy = parseInt(bezier(t / 40, D1y, D2y, D3y, D4y));
+
+		this.designerContext.clearRect(0, 0, 300, 300);
+		this.designerContext.putImageData(designerImageData, 0, 0);
+		this.designerContext.beginPath();
+		this.designerContext.arc(Dx, Dy, 5, 0, 2 * Math.PI, false);
+		this.designerContext.fill();
+
+		var Px = parseInt(bezier(t / 40, P1x, P2x, P3x, P4x));
+		var Py = parseInt(bezier(t / 40, P1y, P2y, P3y, P4y));
+
+		this.presenterContext.clearRect(0, 0, 500, 200);
+		this.presenterContext.putImageData(presenterImageData, 0, 0);
+		this.presenterContext.beginPath();
+		this.presenterContext.arc(Py, Px, 5, 0, 2 * Math.PI, false);
+		this.presenterContext.fill();
+
+		if (t == 40) clearInterval(interval);
+		t++;
+	}).bind(this), 25);
 };
 
-BezierPath.prototype.generateTransition = function () {
+BezierPath.prototype.getBezierPoints = function() {
 	var ax = (this.pointers[0].getLeft() - this.canvas.offsetLeft + 15), 
 			ay = 300 - (this.pointers[0].getTop() - this.canvas.offsetTop + 15), 
 			bx = (this.pointers[1].getLeft() - this.canvas.offsetLeft + 15), 
@@ -163,7 +211,13 @@ BezierPath.prototype.generateTransition = function () {
 	bx = bx / 300;
 	by = by / 300;
 
-	var fun = 'cubic-bezier(+' + ax + ',' + ay + ',' + bx + ',' + by + ')';
+	return [{ x: ax, y: ay }, { x: bx, y: by }];
+};
+
+BezierPath.prototype.generateTransition = function () {
+	var points = this.getBezierPoints();
+
+	var fun = 'cubic-bezier(+' + points[0].x + ',' + points[0].y + ',' + points[1].x + ',' + points[1].y + ')';
 	animationElement.style['-webkit-transition-timing-function'] = fun; 
 };
 
