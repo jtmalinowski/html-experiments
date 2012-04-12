@@ -1,152 +1,181 @@
-(function () {
-	var canvas, ctx, pointers, animationElement, animationLocked;
+var Pointer = function (x, y) {
+	this.domElement = document.createElement('div');
+	this.domElement.setAttribute('class', 'curve-pointer');
 
-	var init = function () {
-		canvas = document.getElementById('curve-designer');
-		animationElement = document.getElementById('animation-element');
-		animationButton = document.getElementById('animation-trigger');
-		pointers = document.getElementsByClassName('curve-pointer');
+	this.domElement.style.position = 'absolute';
+	this.domElement.style.top = y + 'px';
+	this.domElement.style.left = x + 'px';
 
-		pointers[0].addEventListener('mousedown', startDragging, false);
-		pointers[0].addEventListener('mouseup', endDragging, false);
-		pointers[1].addEventListener('mousedown', startDragging, false);
-		pointers[1].addEventListener('mouseup', endDragging, false);
-		document.addEventListener('mousemove', doDragging, false);
-		animationElement.addEventListener('webkitTransitionEnd', unlockAnimation, false);
-		animationButton.addEventListener('click', toggleAnimation, false);
+	this.draggingHandler = this.doDragging.bind(this);
+	
+	document.body.appendChild(this.domElement);
+	this.domElement.addEventListener('mousedown', this.startDragging.bind(this), false);
+	this.domElement.addEventListener('mouseup', this.endDragging.bind(this), false);
 
-		pointers[0].style.top = canvas.offsetTop -15 + 'px';
-		pointers[0].style.left = canvas.offsetLeft - 15 + 'px';
-		pointers[1].style.top = canvas.offsetTop - 15 + 300 + 'px';
-		pointers[1].style.left = canvas.offsetLeft - 15 + 300 + 'px';
+	this.bezierPath = null;
 
-		ctx = canvas.getContext('2d');
-		ctx.strokeStyle = 'rgb(200,0,0)';
-		ctx.fillStyle = 'rgb(0,0,0)';
+	return this;
+};
 
-		drawLine();
-		generateTransition();
+Pointer.prototype.startDragging = function (e) {
+	document.addEventListener('mousemove', this.draggingHandler, false);
+	e.preventDefault();
+};
+Pointer.prototype.doDragging = function (e) {
+	this.domElement.style.top = e.y - 15 + 'px';
+	this.domElement.style.left = e.x - 15 + 'px';
+
+	this.bezierPath && this.bezierPath.drawLine();
+	e.preventDefault();
+};
+Pointer.prototype.endDragging = function (e) {
+	document.removeEventListener('mousemove', this.draggingHandler, false);
+	this.bezierPath && this.bezierPath.generateTransition();
+
+	e.preventDefault();
+};
+
+Pointer.prototype.getLeft = function() {
+	return this.domElement.offsetLeft;
+};
+Pointer.prototype.getTop = function() {
+	return this.domElement.offsetTop;
+};
+
+var BezierPath = function () {
+	this.pointers = [];
+	this.isRun = false;
+
+	this.domElement = document.getElementById('curve-designer');
+
+	animationElement = document.getElementById('animation-element');
+	animationButton = document.getElementById('animation-trigger');
+
+	animationElement.addEventListener('webkitTransitionEnd', this.unlockAnimation.bind(this), false);
+	animationButton.addEventListener('click', this.toggleAnimation.bind(this), false);
+
+	this.addPointer(new Pointer(this.domElement.offsetLeft - 15, this.domElement.offsetTop - 15));
+	this.addPointer(new Pointer(this.domElement.offsetLeft - 15 + 300, this.domElement.offsetTop - 15 + 300));	
+
+	this.canvas = document.getElementById('curve-designer');
+	this.ctx = this.canvas.getContext('2d');
+	this.ctx.strokeStyle = 'rgb(200,0,0)';
+	this.ctx.fillStyle = 'rgb(0,0,0)';
+
+	return this;
+};
+
+BezierPath.prototype.addPointer = function(pointer) {
+	pointer.bezierPath = this;
+	this.pointers.push(pointer);
+};
+
+BezierPath.prototype.drawLine = function () {
+	this.ctx.clearRect(0, 0, 300, 300);
+	this.ctx.beginPath();
+	this.ctx.moveTo(0, 300);
+	this.ctx.bezierCurveTo(
+		this.pointers[0].getLeft() - this.canvas.offsetLeft + 15, 
+		this.pointers[0].getTop() - this.canvas.offsetTop + 15, 
+		this.pointers[1].getLeft() - this.canvas.offsetLeft + 15, 
+		this.pointers[1].getTop() - this.canvas.offsetTop + 15, 
+		300, 0);
+	this.ctx.stroke();
+
+	this.ctx.beginPath();
+	this.ctx.moveTo(0, 300);
+	this.ctx.lineTo(
+		this.pointers[0].getLeft() - this.canvas.offsetLeft + 15, 
+		this.pointers[0].getTop() - this.canvas.offsetTop + 15 
+	);
+	this.ctx.stroke();
+
+	this.ctx.beginPath();
+	this.ctx.moveTo(300, 0);
+	this.ctx.lineTo(
+		this.pointers[1].getLeft() - this.canvas.offsetLeft + 15, 
+		this.pointers[1].getTop() - this.canvas.offsetTop + 15 
+	);
+	this.ctx.stroke();
+};
+
+BezierPath.prototype.toggleAnimation = function () {
+		if (animationLocked) return;
+
+		this.runAnimationIndicator();
+
+		if (!this.isRun) animationElement.setAttribute('class', 'animation-run');
+		else animationElement.setAttribute('class', '');
+
+		this.isRun = !this.isRun;
+		animationLocked = true;
+};
+
+BezierPath.prototype.unlockAnimation = function () {
+	animationLocked = false;
+};
+
+BezierPath.prototype.runAnimationIndicator = function () {
+	var P1x = 0,
+			P1y = 300,
+			P2x = this.pointers[0].getLeft() - this.canvas.offsetLeft + 15,
+			P2y = this.pointers[0].getTop() - this.canvas.offsetTop + 15,
+			P3x = this.pointers[1].getLeft() - this.canvas.offsetLeft + 15,
+			P3y = this.pointers[1].getTop() - this.canvas.offsetTop + 15,
+			P4x = 300,
+			P4y = 0;
+
+	var bezierX = function (t) {
+		var s = (1 - t);
+		return s*s*s*P1x + 3*s*s*t*P2x + 3*s*t*t*P3x + t*t*t*P4x;
+	};
+	var bezierY = function (t) {
+		var s = (1 - t);
+		return s*s*s*P1y + 3*s*s*t*P2y + 3*s*t*t*P3y + t*t*t*P4y;
 	};
 
-	var draggedElement = null;
-	var startDragging = function (e) {
-		draggedElement = this;
-		e.preventDefault();
-	};
-	var doDragging = function (e) {
-		if (!draggedElement) return;
+	var imageData = this.ctx.getImageData(0, 0, 300, 300);
 
-		draggedElement.style.top = e.y - 15 + 'px';
-		draggedElement.style.left = e.x - 15 + 'px';
-		drawLine();
-		e.preventDefault();
-	};
-	var endDragging = function (e) {
-		draggedElement = null;
-		generateTransition();
-
-		e.preventDefault();
-	};
-
-	var drawLine = function () {
-		ctx.clearRect(0, 0, 300, 300);
-		ctx.beginPath();
-		ctx.moveTo(0, 300);
-		ctx.bezierCurveTo(
-			pointers[0].offsetLeft - canvas.offsetLeft + 15, 
-			pointers[0].offsetTop - canvas.offsetTop + 15, 
-			pointers[1].offsetLeft - canvas.offsetLeft + 15, 
-			pointers[1].offsetTop - canvas.offsetTop + 15, 
-			300, 0);
-		ctx.stroke();
-
-		ctx.beginPath();
-		ctx.moveTo(0, 300);
-		ctx.lineTo(
-			pointers[0].offsetLeft - canvas.offsetLeft + 15, 
-			pointers[0].offsetTop - canvas.offsetTop + 15 
-		);
-		ctx.stroke();
-
-		ctx.beginPath();
-		ctx.moveTo(300, 0);
-		ctx.lineTo(
-			pointers[1].offsetLeft - canvas.offsetLeft + 15, 
-			pointers[1].offsetTop - canvas.offsetTop + 15 
-		);
-		ctx.stroke();
-	};
-
-	var toggleAnimation = (function () {
-		var isRun = false;
-			
-		return function () {
-			if (animationLocked) return;
-
-			runAnimationIndicator();
-
-			if (!isRun) animationElement.setAttribute('class', 'animation-run');
-			else animationElement.setAttribute('class', '');
-
-			isRun = !isRun;
-			animationLocked = true;
-		};
-	})();
-
-	var unlockAnimation = function () {
-		animationLocked = false;
-	};
-
-	var runAnimationIndicator = function () {
-		var P1x = 0,
-				P1y = 300,
-				P2x = pointers[0].offsetLeft - canvas.offsetLeft + 15,
-				P2y = pointers[0].offsetTop - canvas.offsetTop + 15,
-				P3x = pointers[1].offsetLeft - canvas.offsetLeft + 15,
-				P3y = pointers[1].offsetTop - canvas.offsetTop + 15,
-				P4x = 300,
-				P4y = 0;
-
-		var bezierX = function (t) {
-			var s = (1 - t);
-			return s*s*s*P1x + 3*s*s*t*P2x + 3*s*t*t*P3x + t*t*t*P4x;
-		};
-		var bezierY = function (t) {
-			var s = (1 - t);
-			return s*s*s*P1y + 3*s*s*t*P2y + 3*s*t*t*P3y + t*t*t*P4y;
-		};
-
-		var imageData = ctx.getImageData(0, 0, 300, 300);
-
-		var t = 1;
-		var interval = setInterval(function () {
+	var t = 1;
+	var interval = setInterval((function () {
 			var x = parseInt(bezierX(t / 40));
 			var y = parseInt(bezierY(t / 40));
-
-			ctx.clearRect(0, 0, 300, 300);
-			ctx.putImageData(imageData, 0, 0);
-			ctx.beginPath();
-			ctx.arc(x, y, 5, 0, 2 * Math.PI, false);
-			ctx.fill();
-
+	
+			this.ctx.clearRect(0, 0, 300, 300);
+			this.ctx.putImageData(imageData, 0, 0);
+			this.ctx.beginPath();
+			this.ctx.arc(x, y, 5, 0, 2 * Math.PI, false);
+			this.ctx.fill();
+	
 			if (t == 40) clearInterval(interval);
 			t++;
-		}, 25);
-	};
+		}).bind(this), 25);
+};
 
-	var generateTransition = function () {
-		var ax = (pointers[0].offsetLeft - canvas.offsetLeft + 15), 
-				ay = 300 - (pointers[0].offsetTop - canvas.offsetTop + 15), 
-				bx = (pointers[1].offsetLeft - canvas.offsetLeft + 15), 
-				by = 300 - (pointers[1].offsetTop - canvas.offsetTop + 15);
+BezierPath.prototype.generateTransition = function () {
+	var ax = (this.pointers[0].getLeft() - this.canvas.offsetLeft + 15), 
+			ay = 300 - (this.pointers[0].getTop() - this.canvas.offsetTop + 15), 
+			bx = (this.pointers[1].getLeft() - this.canvas.offsetLeft + 15), 
+			by = 300 - (this.pointers[1].getTop() - this.canvas.offsetTop + 15);
 
-		ax = ax / 300;
-		ay = ay / 300;
-		bx = bx / 300;
-		by = by / 300;
+	ax = ax / 300;
+	ay = ay / 300;
+	bx = bx / 300;
+	by = by / 300;
 
-		var fun = 'cubic-bezier(+' + ax + ',' + ay + ',' + bx + ',' + by + ')';
-		animationElement.style['-webkit-transition-timing-function'] = fun; 
+	var fun = 'cubic-bezier(+' + ax + ',' + ay + ',' + bx + ',' + by + ')';
+	animationElement.style['-webkit-transition-timing-function'] = fun; 
+};
+
+var animationElement, animationLocked;
+var pointers = [];
+(function () {
+
+	var init = function () {
+		var bezierPath = new BezierPath();
+		
+		bezierPath.drawLine();
+		bezierPath.generateTransition();
 	};
 
 	window.addEventListener('load', init, false);
