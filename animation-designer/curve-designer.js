@@ -66,6 +66,8 @@ var BezierPath = function () {
 	this.designerContext.strokeStyle = 'rgb(200,0,0)';
 	this.designerContext.fillStyle = 'rgb(0,0,0)';
 
+	this.animationCode = document.getElementById('animation-code');
+
 	return this;
 };
 
@@ -217,7 +219,13 @@ BezierPath.prototype.getBezierPoints = function() {
 BezierPath.prototype.generateTransition = function () {
 	var points = this.getBezierPoints();
 
-	var fun = 'cubic-bezier(+' + points[0].x + ',' + points[0].y + ',' + points[1].x + ',' + points[1].y + ')';
+	var fun = 'cubic-bezier(+' 
+		+ points[0].x.toFixed(3) + ',' 
+		+ points[0].y.toFixed(3) + ',' 
+		+ points[1].x.toFixed(3) + ',' 
+		+ points[1].y.toFixed(3) + ')';
+
+	this.animationCode.innerText = fun;
 	animationElement.style['-webkit-transition-timing-function'] = fun; 
 };
 
