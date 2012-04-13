@@ -195,6 +195,8 @@ BezierPath.prototype.runAnimationIndicator = function () {
 		this.presenterContext.putImageData(presenterImageData, 0, 0);
 		this.presenterContext.beginPath();
 		this.presenterContext.arc(Py, Px, 5, 0, 2 * Math.PI, false);
+		this.presenterContext.arc(5, Px, 5, 0, 2 * Math.PI, false);
+		this.presenterContext.arc(Py, 195, 5, 0, 2 * Math.PI, false);
 		this.presenterContext.fill();
 
 		if (t == 40) clearInterval(interval);
@@ -219,7 +221,7 @@ BezierPath.prototype.getBezierPoints = function() {
 BezierPath.prototype.generateTransition = function () {
 	var points = this.getBezierPoints();
 
-	var fun = 'cubic-bezier(+' 
+	var fun = 'cubic-bezier(' 
 		+ points[0].x.toFixed(3) + ',' 
 		+ points[0].y.toFixed(3) + ',' 
 		+ points[1].x.toFixed(3) + ',' 
