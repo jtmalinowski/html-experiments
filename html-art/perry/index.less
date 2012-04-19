@@ -1,0 +1,225 @@
+html, body { margin: 0; padding: 0; height: 100%; width: 100%; }
+body {
+	background: white;
+}
+
+#container {
+	position: absolute;
+	top: 0; 
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	margin: auto;
+
+	height: 500px;
+	width: 750px;
+	background: rgba(0, 0, 0, 0.1);
+}
+
+/* colors */
+
+@iris_border_color: #000;
+@iris_color: #fff;
+@pupil_color: #69321e;
+@eye_glow_border_color: #231f20;
+@eye_glow_color: #fff;
+
+/* eyes */
+
+.left_eye_shape(@factor) {
+	width: 55px * @factor;
+	height: 41px * @factor;
+
+	border-top-left-radius: 33px * @factor 24px * @factor;
+	border-top-right-radius: 22px * @factor 17px * @factor;
+	border-bottom-right-radius: 33px * @factor 24px * @factor;
+	border-bottom-left-radius: 22px * @factor 17px * @factor;
+}
+
+.left_iris_shape(@factor) {
+	width: 103px * @factor;
+	height: 82px * @factor;
+
+	border-top-left-radius: 57px * @factor 45px * @factor;
+	border-top-right-radius: 45px * @factor 37px * @factor;
+	border-bottom-right-radius: 57px * @factor 45px * @factor;
+	border-bottom-left-radius: 46px * @factor 37px * @factor;
+}
+
+#left_eye {
+	#iris_border {
+		position: absolute;
+		left: 348px;
+		top: 69px;
+		.left_iris_shape(1);
+		background-color: @iris_border_color;
+	}
+	#iris {
+		position: absolute;
+		left: 353px;
+		top: 73px;
+		.left_iris_shape(0.91);
+		background-color: @iris_color;
+	}
+	#pupil_border {
+		position: absolute;
+		left: 362px;
+		top: 95px;
+		.left_eye_shape(1);
+	}
+	#pupil {
+		position: absolute;
+		left: 367px;
+		top: 99px;
+
+		.left_eye_shape(0.85);
+
+		background-color: @pupil_color;
+	}
+	#eye_glow_border {
+		position: absolute;
+		left: 373px;
+		top: 106px;
+
+		.left_eye_shape(0.33);
+
+		background-color: @eye_glow_border_color;
+	}
+	#eye_glow {
+		position: absolute;
+		left: 376px;
+		top: 108px;
+
+		.left_eye_shape(0.22);
+
+		background-color: @eye_glow_color;
+	}
+}
+
+
+.right_iris_shape(@factor) {
+	width: 104px * @factor;
+	height: 81px * @factor;
+
+	border-top-left-radius: 59px * @factor 44px * @factor;
+	border-top-right-radius: 45px * @factor 34px * @factor;
+	border-bottom-right-radius: 57px * @factor 47px * @factor;
+	border-bottom-left-radius: 47px * @factor 37px * @factor;
+}
+
+.right_pupil_shape(@factor) {
+	width: 44px * @factor;
+	height: 39px * @factor;
+
+	border-top-left-radius: 20px * @factor 19px * @factor;
+	border-top-right-radius: 24px * @factor 20px * @factor;
+	border-bottom-right-radius: 21px * @factor 19px * @factor;
+	border-bottom-left-radius: 23px * @factor 20px * @factor;
+}
+
+.right_eye_glow_shape(@factor) {
+	width: 16px * @factor;
+	height: 13px * @factor;
+
+	border-top-left-radius: 6px * @factor 5px * @factor;
+	border-top-right-radius: 10px * @factor 8px * @factor;
+	border-bottom-right-radius: 6px * @factor 5px * @factor;
+	border-bottom-left-radius: 10px * @factor 8px * @factor;
+}
+
+#right_eye {
+	position: absolute;
+	top: 33px;
+	left: 514px;
+
+	#iris_border {
+		position: absolute;
+		left: 0;
+		top: 0;
+		.right_iris_shape(1);
+		background-color: @iris_border_color;
+	}
+	#iris {
+		position: absolute;
+		left: 5px;
+		top: 4px;
+		.right_iris_shape(0.91);
+		background-color: @iris_color;
+	}
+	#pupil_border {
+		position: absolute;
+		left: 50px;
+		top: 12px;
+		.right_pupil_shape(1);
+	}
+	#pupil {
+		position: absolute;
+		left: 54px;
+		top: 15px;
+
+		.right_pupil_shape(0.85);
+
+		background-color: @pupil_color;
+	}
+	#eye_glow_border {
+		position: absolute;
+		left: 70px;
+		top: 20px;
+
+		.right_eye_glow_shape(1);
+
+		background-color: @eye_glow_border_color;
+	}
+	#eye_glow {
+		position: absolute;
+		left: 73px;
+		top: 22px;
+
+		.right_eye_glow_shape(0.62);
+
+		background-color: @eye_glow_color;
+	}
+}
+
+.orange_skin {
+	background-color: #fcb034;
+}
+
+.orange_skin_border {
+	background-color: #de791b;
+}
+
+.blue_skin {
+	background-color: #00b1b1;
+}
+
+.blue_skin_border {
+	background-color: #231f20;
+}
+
+.tail {
+	background-color: #f9a25e;
+}
+
+.tail_cross {
+	background-color: #ea7e1e;
+}
+
+.tail_border {
+	background-color: #de791b;
+}
+
+#reference {
+	position: absolute;
+	top: 0; 
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	margin: auto;
+
+	height: 500px;
+	width: 750px;
+	background: url('perry-small.png');
+}
