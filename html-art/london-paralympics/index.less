@@ -9,6 +9,27 @@ body {
 @green: #00bb99;
 @orange: #ff5500;
 
+.rotate(@val) {
+	-webkit-transform: rotate(@val);
+	-moz-transform: rotate(@val);
+	-o-transform: rotate(@val);
+	transform: rotate(@val);
+}
+
+.skewx(@val) {
+	-webkit-transform: skewx(@val);
+	-moz-transform: skewx(@val);
+	-o-transform: skewx(@val);
+	transform: skewx(@val);
+}
+
+.rotate_skewx(@rotate, @skew) {
+	-webkit-transform: rotate(@rotate) skewx(@skew);
+	-moz-transform: rotate(@rotate) skewx(@skew);
+	-o-transform: rotate(@rotate) skewx(@skew);
+	transform: rotate(@rotate) skewx(@skew);
+}
+
 #container {
 	position: absolute;
 	top: 0; 
@@ -44,7 +65,7 @@ body {
 
 	background-color: @blue;
 
-	-webkit-transform: rotate(23deg) skewx(10deg);
+	.rotate_skewx(23deg, 10deg);
 
 	.stripe1 { .london_stripe(1); }
 	.stripe2 { .london_stripe(3); }
@@ -72,7 +93,7 @@ body {
 	top: 161px;
 	left: 3px;
 
-	-webkit-transform: rotate(-3.8deg);
+	.rotate(-3.8deg);
 
 	.upper_triangle {
 		position: absolute;
@@ -162,7 +183,7 @@ body {
 		top: -18px;
 		left: 283px;
 
-		-webkit-transform: rotate(45deg);
+		.rotate(45deg);
 
 		.left_triangle {
 			position: absolute;
@@ -206,7 +227,7 @@ body {
 		top: 120px;
 		left: 285px;
 
-		-webkit-transform: rotate(45deg);
+		.rotate(45deg);
 	}
 	.curve1:after {
 		.crop_curve;
@@ -217,7 +238,7 @@ body {
 		top: 125px;
 		left: 242px;
 
-		-webkit-transform: rotate(120deg);
+		.rotate(120deg);
 	}
 	.curve2:after {
 		.crop_curve;
@@ -228,7 +249,7 @@ body {
 		top: 95px;
 		left: 212px;
 
-		-webkit-transform: rotate(170deg);
+		.rotate(170deg);
 	}
 	.curve3:after {
 		.crop_curve;
@@ -240,7 +261,7 @@ body {
 	top: 290px;
 	left: 210px;
 
-	-webkit-transform: rotate(105deg);
+	.rotate(105deg);
 
 	.left_triangle {
 		position: absolute;
@@ -355,7 +376,7 @@ body {
 	
 	top: 215px;
 	left: 318px;
-	-webkit-transform: rotate(33deg);
+	.rotate(33deg);
 
 	.lower_box {
 		position: absolute;
@@ -402,7 +423,7 @@ body {
 		position: absolute;
 		top: 0px;
 		left: 51px;
-		-webkit-transform: rotate(26deg);
+		.rotate(26deg);
 
 		.left_box {
 			position: absolute;
@@ -433,7 +454,7 @@ body {
 				height: 26px;
 				background-color: @orange;
 				
-				-webkit-transform: rotate(53deg);	
+				.rotate(53deg);	
 			}
 		}
 		.lower_box {
@@ -464,7 +485,7 @@ body {
 			top: -61px;
 			left: 80px;
 
-			-webkit-transform: rotate(53deg);
+			.rotate(53deg);
 
 			.upper1 {
 				position: absolute;
@@ -537,13 +558,13 @@ body {
 	top: 285px;
 	left: 208px;
 
-	-webkit-transform: rotate(5deg);
+	.rotate(5deg);
 
 	.content {
 		width: 70px;
 		height: 57px;
 
 		background-color: @green;
-		-webkit-transform: skewx(-10deg);
+		.skewx(-10deg);
 	}
 }
