@@ -126,6 +126,119 @@ body {
 	}
 }
 
+#bottom_left_box {
+	position: absolute;
+	top: 290px;
+	left: 210px;
+
+	-webkit-transform: rotate(105deg);
+
+	.left_triangle {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+
+		height: 0px;
+		width: 0px;
+
+		border-top: 0;
+		border-left: 59px solid transparent;
+		border-right: 0;
+		border-bottom: 96px solid @violet;
+	}
+	.rectangle {
+		position: absolute;
+		top: 0px;
+		left: 59px;
+
+		height: 96px;
+		width: 128px;
+		background-color: @violet;
+	}
+	.right_triangle {
+		position: absolute;
+		top: 0px;
+		left: 186px;
+
+		height: 0px;
+		width: 0px;
+
+		border-top: 0;
+		border-left: 0;
+		border-right: 54px solid transparent;
+		border-bottom: 96px solid @violet;
+	}
+	.cropper {
+		position: absolute;
+		top: 70px;
+		left: -1px;
+
+		height: 0px;
+		width: 0px;
+
+		border-top: 0;
+		border-left: 17px solid transparent;
+		border-right: 17px solid transparent;
+		border-bottom: 27px solid @white;
+	}
+
+	.green_box {
+		position: absolute;
+		top: 0px;
+		left: 23.5px;
+
+		.left_triangle {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+
+			height: 0px;
+			width: 0px;
+
+			border-top: 0;
+			border-left: 34.5px solid transparent;
+			border-right: 0;
+			border-bottom: 58px solid @green;
+		}
+		.rectangle {
+			position: absolute;
+			top: 0px;
+			left: 34.5px;
+
+			height: 58px;
+			width: 65px;
+			background-color: @green;
+		}
+		.right_triangle {
+			position: absolute;
+			top: 0px;
+			left: 98.5px;
+
+			height: 0px;
+			width: 0px;
+
+			border-top: 0;
+			border-left: 0;
+			border-right: 68px solid transparent;
+			border-bottom: 58px solid @green;
+		}
+	}
+
+	.cape {
+		position: absolute;
+		top: 96px;
+		left: 33px;
+
+		height: 0px;
+		width: 0px;
+
+		border-top: 65px solid @violet;
+		border-left: 42px solid transparent;
+		border-right: 40px solid transparent;
+		border-bottom: 0;
+	}
+}
+
 #reference {
 	position: absolute;
 	top: 0; 
