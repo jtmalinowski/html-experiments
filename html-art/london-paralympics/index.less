@@ -1,0 +1,142 @@
+html, body { margin: 0; padding: 0; height: 100%; width: 100%; }
+body {
+	background: white;
+}
+
+@blue: #0099ff;
+@violet: #df0094;
+@white: #fff;
+@green: #00bb99;
+@orange: #ff5500;
+
+#container {
+	position: absolute;
+	top: 0; 
+	bottom: 0;
+	left: 0;
+	right: 0;
+	opacity: 0.8;
+
+	margin: auto;
+
+	height: 500px;
+	width: 445px;
+	background: rgba(0, 0, 0, 0.1);
+}
+
+.london_stripe(@factor) {
+	position: absolute;
+	top: -5px;
+	left: 11px * @factor;
+
+	width: 11px;
+	height: 100px;
+
+	background-color: @violet;
+}
+
+#striped_box {
+	position: absolute;
+	top: 76px;
+	left: 12px;
+	overflow: hidden;
+
+	width: 140px;
+	height: 90px;
+
+	background-color: @blue;
+
+	-webkit-transform: rotate(23deg) skewx(10deg);
+
+	.stripe1 { .london_stripe(1); }
+	.stripe2 { .london_stripe(3); }
+	.stripe3 { .london_stripe(5); }
+	.stripe4 { .london_stripe(7); }
+	.stripe5 { .london_stripe(9); }
+	.stripe6 { .london_stripe(11); }
+	.triangle {
+		position: absolute;
+		top: -1px;
+		left: 99px;
+
+		height: 0px;
+		width: 0px;
+
+		border-top: 0;
+		border-left: 42px solid transparent;
+		border-right: 0;
+		border-bottom: 91px solid @violet;
+	}
+}
+
+#london_box {
+	position: absolute;
+	top: 162px;
+	left: 3px;
+
+	-webkit-transform: rotate(-3.8deg);
+
+	.upper_triangle {
+		position: absolute;
+		top: 0px;
+		left: 37px;
+
+		height: 0px;
+		width: 0px;
+
+		border-top: 0;
+		border-left: 17px solid transparent;
+		border-right: 75px solid transparent;
+		border-bottom: 38px solid @violet;
+	}
+	.left_triangle {
+		position: absolute;
+		top: 38px;
+		left: 0px;
+
+		height: 0px;
+		width: 0px;
+
+		border-top: 0;
+		border-left: 37px solid transparent;
+		border-right: 0;
+		border-bottom: 92px solid @violet;
+	}
+	.right_triangle {
+		position: absolute;
+		top: 38px;
+		left: 172.75px;
+
+		height: 0px;
+		width: 0px;
+
+		border-top: 0;
+		border-left: 0;
+		border-right: 37px solid transparent;
+		border-bottom: 92px solid @violet;
+	}
+	.rectangle {
+		position: absolute;
+		top: 38px;
+		left: 36.5px;
+
+		height: 92px;
+		width: 137px;
+		background-color: @violet;
+	}
+}
+
+#reference {
+	position: absolute;
+	top: 0; 
+	bottom: 0;
+	left: 0;
+	right: 0;
+	opacity: 0.5;
+
+	margin: auto;
+
+	height: 500px;
+	width: 445px;
+	background: url('logo-small.png');
+}
