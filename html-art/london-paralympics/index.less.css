@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'london2012Regular';
+  src: url('london_2012_font_by_myfox-webfont.eot');
+  src: url('london_2012_font_by_myfox-webfont.eot?#iefix') format('embedded-opentype'), url('london_2012_font_by_myfox-webfont.woff') format('woff'), url('london_2012_font_by_myfox-webfont.ttf') format('truetype'), url('london_2012_font_by_myfox-webfont.svg#everyoneRegular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
 html,
 body {
   margin: 0;
@@ -7,6 +14,7 @@ body {
 }
 body {
   background: white;
+  font-family: london2012Regular;
 }
 #container {
   position: absolute;
@@ -570,4 +578,20 @@ body {
   -moz-transform: skewx(-10deg);
   -o-transform: skewx(-10deg);
   transform: skewx(-10deg);
+}
+#london_text {
+  position: absolute;
+  top: 220px;
+  left: 45px;
+  font-size: 36px;
+}
+#paralympic_games_text {
+  position: absolute;
+  top: 410px;
+  left: 237px;
+  font-size: 23px;
+  -webkit-transform: rotate(30deg);
+  -moz-transform: rotate(30deg);
+  -o-transform: rotate(30deg);
+  transform: rotate(30deg);
 }
